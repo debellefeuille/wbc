@@ -1,0 +1,95 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Year {
+  id Int @id @default(autoincrement())
+  // gm_year Int [ref: > player.id, note: "GM of the year"]
+  // ceasar Int [ref: > player.id]
+  // consul Int [ref: > player.id]
+  // praetor Int [ref: > player.id]
+  // sportmanship Int [ref: > player.id]
+
+  conventions             Convention[]
+  tournamentsInYear       Tournament[] @relation("membershipYear")
+  tournamentLaurelsInYear Tournament[] @relation("laurelYear")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Player {
+  // "Ideally the badge number but the first convention was reusing the badge number. May be we should still use it and have a backup for them"
+  id          Int     @id @default(autoincrement())
+  firstName   String?
+  badgeNumber String
+  picture     String?
+
+  tournamentsGMd Tournament[]
+  standings      Standing[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Convention {
+  id        Int      @id @default(autoincrement())
+  year      Year     @relation(fields: [yearId], references: [id])
+  yearId    Int
+  type      String // Eg. WBC
+  location  String
+  startTime DateTime
+  endTime   DateTime
+  // bestTeam int [ref: > team.id]
+
+  tournaments Tournament[]
+}
+
+model Game {
+  id          Int          @id @default(autoincrement())
+  name        String
+  picture     String
+  tournaments Tournament[]
+  // scoreSystem int [note: "Create an Enum"]
+}
+
+model Tournament {
+  id                   Int         @id @default(autoincrement())
+  name                 String
+  game                 Game        @relation(fields: [gameId], references: [id])
+  gameId               Int
+  membershipYear       Year        @relation(name: "membershipYear", fields: [membershipYearId], references: [id])
+  membershipYearId     Int
+  laurelYear           Year        @relation(name: "laurelYear", fields: [laurelYearId], references: [id])
+  laurelYearId         Int
+  convention           Convention? @relation(fields: [conventionId], references: [id])
+  conventionId         Int
+  // type int [note: "Create an Enum"]
+  playerPerTable       Int
+  missingPlayerApproch Int // [note: "-1 or 1"]
+  tournamentGm         Player      @relation(fields: [gmId], references: [id])
+  gmId                 Int
+  previewUrl           String
+  reportUrl            String
+  numberOfPlayers      Int
+  standings            Standing[]
+}
+
+model Standing {
+  id           Int        @id @default(autoincrement())
+  tournament   Tournament @relation(fields: [tournamentId], references: [id])
+  tournamentId Int
+  player       Player     @relation(fields: [playerId], references: [id])
+  playerId     Int
+  position     Int
+  laurel       Int
+  plaque       Boolean
+}
