@@ -8,7 +8,7 @@ COPY . .
 
 RUN chmod +x /app/wait-for-postgres.sh
 
-RUN npm ci
+RUN npm i
 
 ENV NEXT_TELEMETRY_DISABLED 1
 
