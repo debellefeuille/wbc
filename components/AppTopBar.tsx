@@ -22,7 +22,7 @@ export default function AppTopBar() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            World BoardGame Championship
+            WBC - World Boardgame Championship
           </Typography>
           <Button color="inherit">Login</Button>
         </Toolbar>
