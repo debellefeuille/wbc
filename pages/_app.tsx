@@ -1,13 +1,12 @@
 import '../styles/globals.css';
 import type { AppProps } from 'next/app';
 import { Typography } from '@mui/material';
+import AppTopBar from '../components/AppTopBar';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <div>
-      <Typography variant="h1" component="h2">
-        h1. Heading
-      </Typography>
+      <AppTopBar></AppTopBar>
       <Component {...pageProps} />
     </div>
   );
