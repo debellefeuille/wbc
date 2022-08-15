@@ -1,57 +1,63 @@
 import '../styles/globals.css';
-import type { AppProps } from 'next/app';
-import { Divider, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
-import { Box } from '@mui/system';
-import { SxProps } from '@mui/system';
-import { Mail, MoveToInbox } from '@mui/icons-material';
-import AppTopBar from '../components/AppTopBar';
 import React from 'react';
+import type { AppProps } from 'next/app';
+import { Box, Drawer, AppBar, CssBaseline, Toolbar, List, Typography, Divider, IconButton, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import HomeIcon from '@mui/icons-material/Home';
+import ConventionIcon from '@mui/icons-material/AccountBalance';
+import GameIcon from '@mui/icons-material/Extension';
+import PlayerIcon from '@mui/icons-material/Person';
+import ScheduleIcon from '@mui/icons-material/CalendarMonth';
+import Link from 'next/link';
+
+const drawerWidth = 250;
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const [menuStatus, setMenuStatus] = React.useState(true);
-  const sxBar:SxProps = { width: 250 };
 
   return (
-    <React.Fragment>
-      <AppTopBar></AppTopBar>
+    <Box sx={{ display: 'flex' }}>
+      <CssBaseline />
+      <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+        <Toolbar>
+          <Typography variant="h6" noWrap component="div">
+            WBC - World Boardgame Championship
+          </Typography>
+        </Toolbar>
+      </AppBar>
       <Drawer
-        anchor="left"
-        open={menuStatus}
+        variant="permanent"
+        sx={{
+          width: drawerWidth,
+          flexShrink: 0,
+          [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' },
+        }}
       >
-        <Box
-          sx={{width:250}}
-          role="presentation"
-        >
+        <Toolbar />
+        <Box sx={{ overflow: 'auto' }}>
           <List>
-            {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-              <ListItem key={text} disablePadding>
-                <ListItemButton>
-                  <ListItemIcon>
-                    <Mail />
-                  </ListItemIcon>
-                  <ListItemText primary={text} />
-                </ListItemButton>
-              </ListItem>
-            ))}
-          </List>
-          <Divider />
-          <List>
-            {['All mail', 'Trash', 'Spam'].map((text) => (
-              <ListItem key={text} disablePadding>
-                <ListItemButton>
-                  <ListItemIcon>
-                    <Mail />
-                  </ListItemIcon>
-                  <ListItemText primary={text} />
-                </ListItemButton>
-              </ListItem>
+            {['Home', 'Conventions', 'Games', 'Players', 'Schedule'].map((text) => (
+              <Link href={"/" + (text == 'Home' ? '' : text.toLowerCase() )}>
+                <ListItem key={text} disablePadding>
+                  <ListItemButton>
+                    <ListItemIcon>
+                      {text === 'Home' ? <HomeIcon /> : null}
+                      {text === 'Conventions' ? <ConventionIcon /> : null}
+                      {text === 'Games' ? <GameIcon /> : null}
+                      {text === 'Players' ? <PlayerIcon /> : null}
+                      {text === 'Schedule' ? <ScheduleIcon /> : null}
+                    </ListItemIcon>
+                    <ListItemText primary={text} />
+                  </ListItemButton>
+                </ListItem>
+              </Link>
             ))}
           </List>
         </Box>
-        
       </Drawer>
-      <Component {...pageProps} />
-    </React.Fragment>
+      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+        <Toolbar />
+        <Component {...pageProps} />
+      </Box>
+    </Box>
   );
 }
 

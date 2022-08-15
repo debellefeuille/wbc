@@ -2,10 +2,10 @@ import type { NextPage } from 'next'
 import styles from '../styles/Home.module.css'
 import { Typography } from '@mui/material';
 
-const Home: NextPage = () => {
+const GameList: NextPage = () => {
   return (
-    <Typography variant="h1">HOME PAGE</Typography>
+    <Typography variant="h1">GAMES</Typography>
   )
 }
 
-export default Home
+export default GameList
