@@ -1,5 +1,4 @@
-import type { NextPage } from 'next'
-import styles from '../styles/Home.module.css'
+import type { NextPage } from 'next';
 import { Typography } from '@mui/material';
 
 const PlayerList: NextPage = () => {
@@ -8,4 +7,4 @@ const PlayerList: NextPage = () => {
   )
 }
 
-export default PlayerList
+export default PlayerList;
