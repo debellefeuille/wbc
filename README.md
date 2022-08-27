@@ -8,8 +8,8 @@ Navigate to `localhost:3000` to view the app.
 
 Once the containers are up, the following commands can be run to migrate models to the database, initialzie the Prisma client, and run Prisma Studio.
 
-1. `docker-compose run app npx prixma migrate deploy`
-2. `docker-compose run app npx prixma generate`
+1. `docker-compose run app npx prisma migrate deploy`
+2. `docker-compose run app npx prisma generate`
 3. `docker-compose run -p 5555:5555 app npx prisma studio`
 
 Navigate to `localhost:3000` to use the databse inspector.
