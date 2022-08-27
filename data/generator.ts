@@ -8,6 +8,9 @@ async function generator() {
 }
 
 async function generateYears() {
+  await prisma.convention.deleteMany();
+  await prisma.year.deleteMany();
+
   for(const year of years) {
     const createYear = await prisma.year.create({
       data: {
