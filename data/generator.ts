@@ -1,11 +1,18 @@
+import { SignalCellularConnectedNoInternet0BarRounded } from '@mui/icons-material';
 import { PrismaClient, Prisma } from '@prisma/client';
 const prisma = new PrismaClient();
 
 import years from './year';
 
 async function generator() {
+  await clearDb();
   await generateYears();
 }
+
+async function clearDb() {
+  await prisma.convention.deleteMany();
+  await prisma.year.deleteMany();
+} 
 
 async function generateYears() {
   await prisma.convention.deleteMany();
