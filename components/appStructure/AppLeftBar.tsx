@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Box, Drawer, Link, Toolbar, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import Link from 'next/link';
+import { Box, Drawer, Toolbar, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import {Home as HomeIcon, AccountBalance as ConventionIcon, Extension as GameIcon, Person as PlayerIcon, CalendarMonth as ScheduleIcon} from '@mui/icons-material';
 
 const drawerWidth = 250;
@@ -30,7 +31,7 @@ const AppLeftBar = (menuOpen: AppLeftBarProps) => (
       <Box sx={{ overflow: 'auto' }}>
         <List>
           {menuItems.map(([linkText, LinkIcon, linkUrl]) => (
-            <Link underline='none' color="inherit" href={linkUrl}>
+            <Link href={linkUrl}>
               <ListItem key={linkText} disablePadding >
                 <ListItemButton>
                   <ListItemIcon>
