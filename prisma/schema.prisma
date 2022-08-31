@@ -11,17 +11,17 @@ datasource db {
 }
 
 model Year {
-  id                      String @id @default(uuid())
-  name                    String @unique
+  id   String @id @default(uuid())
+  name String @unique
   // gm_year Int [ref: > player.id, note: "GM of the year"]
   // ceasar Int [ref: > player.id]
   // consul Int [ref: > player.id]
   // praetor Int [ref: > player.id]
   // sportmanship Int [ref: > player.id]
 
-  conventions             Convention[]
-  tournamentsStarting     Tournament[] @relation("membershipYear")
-  tournamentsFinishing    Tournament[] @relation("laurelYear")
+  conventions          Convention[]
+  tournamentsStarting  Tournament[] @relation("membershipYear")
+  tournamentsFinishing Tournament[] @relation("laurelYear")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -29,7 +29,7 @@ model Year {
 
 model Player {
   // "Ideally the badge number but the first convention was reusing the badge number. May be we should still use it and have a backup for them"
-  id          String     @id @default(uuid())
+  id          String  @id @default(uuid())
   firstName   String?
   badgeNumber String
   picture     String?
@@ -42,8 +42,8 @@ model Player {
 }
 
 model Convention {
-  id        String      @id @default(uuid())
-  year      Year        @relation(fields: [yearId], references: [id])
+  id        String   @id @default(uuid())
+  year      Year     @relation(fields: [yearId], references: [id])
   yearId    String
   type      String // Eg. WBC
   location  String
@@ -55,16 +55,17 @@ model Convention {
 }
 
 model Game {
-  id          String          @id @default(uuid())
-  name        String
-  picture     String
-  tournaments Tournament[]
+  id              String       @id @default(uuid())
+  abbreviation    String       @unique
+  alternativeName String[]
+  name            String
+  picture         String?
+  tournaments     Tournament[]
   // scoreSystem int [note: "Create an Enum"]
 }
 
 model Tournament {
-  id                   String         @id @default(uuid())
-  name                 String
+  id                   String      @id @default(uuid())
   game                 Game        @relation(fields: [gameId], references: [id])
   gameId               String
   membershipYear       Year        @relation(name: "membershipYear", fields: [membershipYearId], references: [id])
@@ -74,13 +75,13 @@ model Tournament {
   convention           Convention? @relation(fields: [conventionId], references: [id])
   conventionId         String
   // type int [note: "Create an Enum"]
-  playerPerTable       Int
-  missingPlayerApproch Int // [note: "-1 or 1"]
-  tournamentGm         Player      @relation(fields: [gmId], references: [id])
-  gmId                 String
-  previewUrl           String
-  reportUrl            String
-  numberOfPlayers      Int
+  playerPerTable       Int?
+  missingPlayerApproch Int? // [note: "-1 or 1"]
+  tournamentGm         Player?      @relation(fields: [gmId], references: [id])
+  gmId                 String?
+  previewUrl           String?
+  reportUrl            String?
+  numberOfPlayers      Int?
   standings            Standing[]
 }
 
@@ -91,6 +92,6 @@ model Standing {
   player       Player     @relation(fields: [playerId], references: [id])
   playerId     String
   position     Int
-  laurel       Int
-  plaque       Boolean
+  laurel       Int?
+  plaque       Boolean?
 }
