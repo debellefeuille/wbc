@@ -13,7 +13,7 @@ const menuItems: [string, JSX.Element, string][] = [
   ['Home', <HomeIcon />, '/'],
   ['Conventions', <ConventionIcon />, '/conventions'],
   ['Games', <GameIcon />, '/games'],
-  ['Players', <PlayerIcon />, 'players'],
+  ['Players', <PlayerIcon />, '/players'],
   ['Schedule', <ScheduleIcon />, '/schedule']
 ]
 
