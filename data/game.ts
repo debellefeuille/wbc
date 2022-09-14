@@ -5,6 +5,8 @@
 // https://www.boardgamers.org/yearbook02/
 // https://www.boardgamers.org/yearbook03/
 
+import {prisma} from '../prisma/instance';
+
 type Game = {
   abbreviation: string,
   name: string,
@@ -15,6 +17,39 @@ type Tournament = {
   year: number,
   nbParticipants?: number,
   laurelists?: [number,number,number,number,number,number,]
+}
+
+async function clearGames() {
+  await prisma.game.deleteMany();
+  console.log('Games cleared');
+}
+
+async function generateGames() {
+  const years = await prisma.year.findMany({
+    include: {
+      conventions: true,
+    },
+  });
+  console.log(years);
+
+  for(const game of games) {
+//    const tournaments = game.tournaments?.map(tournament => {
+//      membershipYear: years.find(year => Number.parseInt(year.name) === tournament.year),
+//      laurelYear: years.find(year => Number.parseInt(year.name) === tournament.year),
+//      convention: years.find(year => Number.parseInt(year.name) === tournament.year)?.conventions.find(convention => convention.type === 'WBC'),      
+//    });
+
+    const createGame = await prisma.game.create({
+      data: {
+        abbreviation: game.abbreviation,
+        name: game.name,
+        // tournaments: {
+        //   createMany: {data: tournaments }
+        //},
+      }
+    })
+  }
+  console.log('Games generated');
 }
 
 /*
@@ -435,4 +470,4 @@ const games: Game[] = [
   */
 ]
 
-export default games;
+export {games, clearGames, generateGames};
