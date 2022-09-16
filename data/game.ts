@@ -6,18 +6,7 @@
 // https://www.boardgamers.org/yearbook03/
 
 import {prisma} from '../prisma/instance';
-
-type Game = {
-  abbreviation: string,
-  name: string,
-  tournaments?: Tournament[],
-}
-
-type Tournament = {
-  year: number,
-  nbParticipants?: number,
-  laurelists?: [number,number,number,number,number,number,]
-}
+import type { Tournament as TournamentDb } from '@prisma/client';
 
 async function clearGames() {
   await prisma.game.deleteMany();
@@ -33,23 +22,46 @@ async function generateGames() {
   console.log(years);
 
   for(const game of games) {
-//    const tournaments = game.tournaments?.map(tournament => {
-//      membershipYear: years.find(year => Number.parseInt(year.name) === tournament.year),
-//      laurelYear: years.find(year => Number.parseInt(year.name) === tournament.year),
-//      convention: years.find(year => Number.parseInt(year.name) === tournament.year)?.conventions.find(convention => convention.type === 'WBC'),      
-//    });
-
     const createGame = await prisma.game.create({
       data: {
         abbreviation: game.abbreviation,
         name: game.name,
-        // tournaments: {
-        //   createMany: {data: tournaments }
-        //},
       }
     })
+
+    if(game.tournaments != undefined) {
+      for(let tournament of game.tournaments) {
+        const year = years.find(year => Number.parseInt(year.name) === tournament.year);
+        const yearId = year?.id;
+        const conventionId = year?.conventions.find(convention => convention.type === 'WBC')?.id;
+
+        if(yearId != undefined && conventionId != undefined) {
+          const createTournament = await prisma.tournament.create({
+            data : {
+              gameId: createGame.id,
+              membershipYearId: yearId,
+              laurelYearId: yearId,
+              conventionId: conventionId,
+              numberOfPlayers: tournament.nbParticipants,
+            }
+          })
+        }
+      }
+    }
   }
   console.log('Games generated');
+}
+
+type Game = {
+  abbreviation: string,
+  name: string,
+  tournaments?: Tournament[],
+}
+
+type Tournament = {
+  year: number,
+  nbParticipants?: number,
+  laurelists?: [number,number,number,number,number,number,]
 }
 
 /*
