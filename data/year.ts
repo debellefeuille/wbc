@@ -1,3 +1,25 @@
+import {prisma} from '../prisma/instance';
+
+async function clearYears() {
+  await prisma.convention.deleteMany();
+  await prisma.year.deleteMany();
+  console.log('Years cleared');
+}
+
+async function generateYears() {
+  for(const year of years) {
+    const createYear = await prisma.year.create({
+      data: {
+        name: year.name,
+        conventions: {
+          createMany: {data: year.conventions }
+        }
+      }
+    })
+  }
+  console.log('Years generated');
+}
+
 type Convention = {
   type: string,
   location: string,
@@ -29,4 +51,4 @@ const years: Year[] = [
   {name: '2007', conventions: [{type: 'WBC', location: 'Lancaster, PA',     startDate: new Date("2007-07-29"), endDate: new Date("2007-08-05")}]},
 ]
 
-export default years;
+export {years, clearYears, generateYears};

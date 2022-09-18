@@ -1,6 +1,6 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
-import dataGenerator from '../../data/generator';
+import { clearYears, generateYears } from '../../../data/year';
+import { clearGames, generateGames } from '../../../data/game';
 
 type Data = {
   name: string
@@ -10,6 +10,9 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  await dataGenerator();
+  await clearYears();
+  await clearGames();
+  await generateYears();
+  await generateGames();
   res.status(200).json({ name: 'Generator Done' });
 }
